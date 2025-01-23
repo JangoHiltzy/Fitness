@@ -49,3 +49,35 @@ double calculate_body_fat_percentage(double waistCm, double neckCm, double heigh
 
     return bodyFatPercentage;
 }
+
+// BMI CATEGORY FUNCTION
+const char *get_bmi_category(double bmi)
+{
+    if (bmi < 18.5)
+        return "Underweight"; // UNDERWEIGHT CATEGORY
+    else if (bmi < 24.9)
+        return "Normal"; // NORMAL CATEGORY
+    else if (bmi < 29.9)
+        return "Overweight"; // OVERWEIGHT CATEGORY
+    else if (bmi < 34.9)
+        return "Obese"; // OBESE CATEGORY
+    else
+        return "Very Obese"; // VERY OBESE CATEGORY
+}
+
+// BODY FAT CATEGORY FUNCTION
+const char *get_body_fat_category(double bodyFatPercentage)
+{
+    if (bodyFatPercentage < 5)
+        return "Essential fat"; // ESSENTIAL FAT CATEGORY
+    else if (bodyFatPercentage < 14)
+        return "Athletes"; // ATHLETES CATEGORY
+    else if (bodyFatPercentage < 20)
+        return "Fitness"; // FITNESS CATEGORY
+    else if (bodyFatPercentage < 24)
+        return "Average"; // AVERAGE CATEGORY
+    else if (bodyFatPercentage < 31)
+        return "Obese"; // OBESE CATEGORY
+    else
+        return "Very Obese"; // VERY OBESE CATEGORY
+}

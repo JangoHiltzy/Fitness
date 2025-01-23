@@ -128,3 +128,88 @@ int validate_positive_double(double *input, const char *prompt)
 
     return 1;
 }
+
+int main()
+{
+    int continueProgram = 1; // VARIABLE TO CONTROL THE LOOP
+    char tryAgain[2];        // VARIABLE TO STORE YES/NO RESPONSE
+    char genderInput;        // VARIABLE TO STORE GENDER INPUT
+
+    while (continueProgram)
+    {
+        // CREATE A BODYMETRICS STRUCT TO HOLD USER DATA
+        BodyMetrics model = {170.0, 70.0, 80.0, 40.0, NULL, Male, 30};
+
+        // ASK FOR GENDER FIRST
+        printf("Enter your gender (m for Male, f for Female): ");
+        while (scanf(" %c", &genderInput) != 1 || (genderInput != 'm' && genderInput != 'f'))
+        {
+            printf("Invalid input. Please enter 'm' for Male or 'f' for Female.\n"); // INVALID GENDER INPUT MESSAGE
+            while (getchar() != '\n')                                                // CLEAR INVALID INPUT
+                ;
+        }
+        model.gender = (genderInput == 'm') ? Male : Female;
+
+        // PROMPT USER FOR INPUT (HEIGHT, WEIGHT, WAIST, NECK)
+        validate_positive_double(&model.heightCm, "Enter height (cm): ");
+        validate_positive_double(&model.weightKg, "Enter weight (kg): ");
+        validate_positive_double(&model.waistCm, "Enter waist measurement (cm): ");
+        validate_positive_double(&model.neckCm, "Enter neck measurement (cm): ");
+
+        // FOR FEMALES, GET HIP MEASUREMENT
+        if (model.gender == Female)
+        {
+            model.hipCm = (double *)malloc(sizeof(double)); // DYNAMICALLY ALLOCATE MEMORY FOR HIPCM
+            validate_positive_double(model.hipCm, "Enter hip measurement (cm): ");
+        }
+
+        // BMI CALCULATION
+        double bmi = calculate_bmi(model.weightKg, model.heightCm);
+        printf("BMI: %.2f\n", bmi);
+        printf("BMI Category: %s\n", get_bmi_category(bmi));
+
+        // BODY FAT CALCULATION
+        double bodyFatPercentage = calculate_body_fat_percentage(model.waistCm, model.neckCm, model.heightCm, model.gender, model.hipCm);
+        printf("Body Fat Percentage: %.2f\n", bodyFatPercentage);
+        printf("Body Fat Category: %s\n", get_body_fat_category(bodyFatPercentage));
+
+        // DIET RECOMMENDATION BASED ON BMI
+        printf("Diet Recommendation: %s\n", get_diet_recommendation(bmi));
+
+        // FREE MEMORY ALLOCATED FOR HIPCM IF NEEDED
+        if (model.hipCm != NULL)
+        {
+            free(model.hipCm); // DON'T FORGET TO FREE THE MEMORY
+        }
+
+        // ASK IF THE USER WANTS TO TRY AGAIN OR EXIT
+        printf("\nDo you want to try again? (y for Yes, n for No): ");
+        while (1) // INFINITE LOOP TO HANDLE INVALID INPUTS
+        {
+            if (scanf("%1s", tryAgain) == 1 && (tryAgain[0] == 'y' || tryAgain[0] == 'Y' || tryAgain[0] == 'n' || tryAgain[0] == 'N'))
+            {
+                // VALID INPUT
+                break; // EXIT THE LOOP
+            }
+            else
+            {
+                printf("Invalid input. Please enter 'y' for Yes or 'n' for No: ");
+                while (getchar() != '\n') // CLEAR THE INPUT BUFFER
+                    ;
+            }
+        }
+
+        // HANDLE USER CHOICE
+        if (tryAgain[0] == 'n' || tryAgain[0] == 'N')
+        {
+            continueProgram = 0;         // EXIT IF USER CHOOSES 'n'
+            printf("Exiting program\n"); // EXIT MESSAGE
+        }
+        else if (tryAgain[0] == 'y' || tryAgain[0] == 'Y')
+        {
+            continueProgram = 1; // ENSURE THE PROGRAM CONTINUES
+        }
+    }
+
+    return 0;
+}

@@ -81,3 +81,50 @@ const char *get_body_fat_category(double bodyFatPercentage)
     else
         return "Very Obese"; // VERY OBESE CATEGORY
 }
+
+// DIET RECOMMENDATION BASED ON BMI
+const char *get_diet_recommendation(double bmi)
+{
+    if (bmi < 18.5)
+    {
+        return "Consider increasing your carbohydrate and protein intake. Aim for a balanced diet with approximately 45-65% of calories from carbohydrates, 10-35% from protein, and 20-35% from fat."; // UNDERWEIGHT DIET RECOMMENDATION
+    }
+    else if (bmi < 24.9)
+    {
+        return "Maintain a balanced diet with approximately 45-65% of calories from carbohydrates, 10-35% from protein, and 20-35% from fat."; // NORMAL DIET RECOMMENDATION
+    }
+    else if (bmi < 29.9)
+    {
+        return "Consider a lower-carb, higher-protein approach such as a Low Carb High Fat (LCHF) or ketogenic (keto) diet."; // OVERWEIGHT DIET RECOMMENDATION
+    }
+    else if (bmi < 35)
+    {
+        return "For obesity, a Low Carb High Fat (LCHF) or ketogenic (keto) diet may be beneficial."; // OBESE DIET RECOMMENDATION
+    }
+    else
+    {
+        return "For severe obesity, a Low Carb High Fat (LCHF) or ketogenic (keto) diet may be beneficial. Consult with a healthcare professional."; // VERY OBESE DIET RECOMMENDATION
+    }
+}
+
+// INPUT VALIDATION FUNCTION
+int validate_positive_double(double *input, const char *prompt)
+{
+    int valid = 0;
+    while (!valid)
+    {
+        printf("%s", prompt);
+        if (scanf("%lf", input) != 1 || *input <= 0)
+        {
+            printf("Invalid input. Please enter a positive number.\n"); // INVALID INPUT ERROR MESSAGE
+            while (getchar() != '\n')
+                ; // CLEAR INVALID INPUT
+        }
+        else
+        {
+            valid = 1;
+        }
+    }
+
+    return 1;
+}

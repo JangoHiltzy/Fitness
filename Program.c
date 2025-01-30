@@ -46,3 +46,63 @@ double calculate_body_fat_percentage(double waistCm, double neckCm, double heigh
     }
     return bodyFatPercentage;
 }
+
+// BMI CATEGORY FUNCTION
+// Return category based on BMI.
+const char *get_bmi_category(double bmi)
+{
+    if (bmi < 18.5)
+        return "Underweight";
+    else if (bmi < 24.9)
+        return "Normal";
+    else if (bmi < 29.9)
+        return "Overweight";
+    else if (bmi < 34.9)
+        return "Obese";
+    else
+        return "Very Obese";
+}
+
+// BODY FAT CATEGORY FUNCTION
+// Return category based on body fat percentage.
+const char *get_body_fat_category(double bodyFatPercentage)
+{
+    if (bodyFatPercentage < 5)
+        return "Essential fat";
+    else if (bodyFatPercentage < 14)
+        return "Athletes";
+    else if (bodyFatPercentage < 20)
+        return "Fitness";
+    else if (bodyFatPercentage < 24)
+        return "Average";
+    else if (bodyFatPercentage < 31)
+        return "Obese";
+    else
+        return "Very Obese";
+}
+
+// DIET RECOMMENDATION BASED ON BMI
+// Return diet recommendation based on BMI.
+const char *get_diet_recommendation(double bmi)
+{
+    if (bmi < 18.5)
+    {
+        return "Increase carbs and protein, aim for 45-65% calories from carbs, 10-35% from protein, and 20-35% from fat.";
+    }
+    else if (bmi < 24.9)
+    {
+        return "Maintain balanced diet with 45-65% carbs, 10-35% protein, and 20-35% fat.";
+    }
+    else if (bmi < 29.9)
+    {
+        return "Consider LCHF or keto diet, higher protein, lower carbs.";
+    }
+    else if (bmi < 35)
+    {
+        return "For obesity, LCHF or keto diet may help.";
+    }
+    else
+    {
+        return "For severe obesity, consult a healthcare professional and consider LCHF or keto.";
+    }
+}

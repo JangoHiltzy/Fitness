@@ -106,3 +106,99 @@ const char *get_diet_recommendation(double bmi)
         return "For severe obesity, consult a healthcare professional and consider LCHF or keto.";
     }
 }
+
+// INPUT VALIDATION FUNCTION
+// Validate user input for positive double values.
+int validate_positive_double(double *input, const char *prompt)
+{
+    int valid = 0;
+    while (!valid)
+    {
+        printf("%s", prompt);
+        if (scanf("%lf", input) != 1 || *input <= 0)
+        {
+            printf("Invalid input. Please enter a positive number.\n");
+            while (getchar() != '\n')
+                ;
+        }
+        else
+        {
+            valid = 1;
+        }
+    }
+    return 1;
+}
+
+int main()
+{
+    int continueProgram = 1;
+    char tryAgain[2];
+    char genderInput;
+
+    while (continueProgram)
+    {
+        BodyMetrics model = {170.0, 70.0, 80.0, 40.0, NULL, Male, 30};
+
+        printf("Enter your gender (m for Male, f for Female): ");
+        while (scanf(" %c", &genderInput) != 1 || (genderInput != 'm' && genderInput != 'f'))
+        {
+            printf("Invalid input. Please enter 'm' for Male or 'f' for Female.\n");
+            while (getchar() != '\n')
+                ;
+        }
+        model.gender = (genderInput == 'm') ? Male : Female;
+
+        validate_positive_double(&model.heightCm, "Enter height (cm): ");
+        validate_positive_double(&model.weightKg, "Enter weight (kg): ");
+        validate_positive_double(&model.waistCm, "Enter waist measurement (cm): ");
+        validate_positive_double(&model.neckCm, "Enter neck measurement (cm): ");
+
+        if (model.gender == Female)
+        {
+            model.hipCm = (double *)malloc(sizeof(double));
+            validate_positive_double(model.hipCm, "Enter hip measurement (cm): ");
+        }
+
+        double bmi = calculate_bmi(model.weightKg, model.heightCm);
+        printf("BMI: %.2f\n", bmi);
+        printf("BMI Category: %s\n", get_bmi_category(bmi));
+
+        double bodyFatPercentage = calculate_body_fat_percentage(model.waistCm, model.neckCm, model.heightCm, model.gender, model.hipCm);
+        printf("Body Fat Percentage: %.2f\n", bodyFatPercentage);
+        printf("Body Fat Category: %s\n", get_body_fat_category(bodyFatPercentage));
+
+        printf("Diet Recommendation: %s\n", get_diet_recommendation(bmi));
+
+        if (model.hipCm != NULL)
+        {
+            free(model.hipCm);
+        }
+
+        printf("\nDo you want to try again? (y for Yes, n for No): ");
+        while (1)
+        {
+            if (scanf("%1s", tryAgain) == 1 && (tryAgain[0] == 'y' || tryAgain[0] == 'Y' || tryAgain[0] == 'n' || tryAgain[0] == 'N'))
+            {
+                break;
+            }
+            else
+            {
+                printf("Invalid input. Please enter 'y' for Yes or 'n' for No: ");
+                while (getchar() != '\n')
+                    ;
+            }
+        }
+
+        if (tryAgain[0] == 'n' || tryAgain[0] == 'N')
+        {
+            continueProgram = 0;
+            printf("Exiting program\n");
+        }
+        else if (tryAgain[0] == 'y' || tryAgain[0] == 'Y')
+        {
+            continueProgram = 1;
+        }
+    }
+
+    return 0;
+}
